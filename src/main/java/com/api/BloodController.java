@@ -50,14 +50,16 @@ public class BloodController {
   public ModelAndView get(ModelAndView model) throws IOException {
     storageService.init();
     storageService.deleteAll();
+
+    //load files, not necessary because we delete all files
     model.addObject("files", storageService.loadAll().map(
         path -> {
           return MvcUriComponentsBuilder.fromMethodName(BloodController.class,
               "serveFile", path.getFileName().toString()).build().toUri().toString();
-          // return null;
         })
         .filter((c) -> c != null)
         .collect(Collectors.toList()));
+        
     model.setViewName("upload.html");
     return model;
   }
@@ -164,7 +166,6 @@ public class BloodController {
     List<String> table = readProcessOutput(process.getInputStream());
     process.destroy();
     String result = table.toString();
-    System.out.println("result"+result);
     result = result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1);
     result = fixJson(result);
     BloodDetails bloodDetails = new ObjectMapper().readValue(result, BloodDetails.class);
@@ -176,12 +177,12 @@ public class BloodController {
     String first = IntStream.range(0, trimmedJson.length())
         .filter(i -> trimmedJson.charAt(i) != ',' || trimmedJson.charAt(i + 1) == '\"')
         .mapToObj(i -> Character.toString(trimmedJson.charAt(i)))
-        .collect(Collectors.joining("")).toString();
+        .collect(Collectors.joining(""));
     String second = IntStream.range(0, first.length())
         .filter(i -> first.charAt(i) != ',' || first.charAt(i - 1) == '\"' || first.charAt(i - 1) == ']' || Character.isDigit(first.charAt(i - 1)))
         .mapToObj(i -> Character.toString(first.charAt(i)))
-        .collect(Collectors.joining("")).toString();
-    return second.replaceAll("null", "\"\",");
+        .collect(Collectors.joining(""));
+    return second.replace("null", "\"\",");
   }
 
   private List<String> readProcessOutput(InputStream inputStream)

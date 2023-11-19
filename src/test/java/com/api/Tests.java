@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 @WebMvcTest(controllers = BloodController.class)
-public class Tests {
+class Tests {
 
     @Autowired
     MockMvc mockMvc;
@@ -22,7 +22,7 @@ public class Tests {
      */
     @WithMockUser(value = "user")
     @Test
-    public void test() throws Exception {
+    void test() throws Exception {
         String actualOutput = mockMvc.perform(MockMvcRequestBuilders.get("/test")).andDo(MockMvcResultHandlers.print())
                 .andReturn().getResponse().getContentAsString();
         JSONAssert.assertNotEquals(actualOutput, "{}", true);
