@@ -22,6 +22,7 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 - GET "/files/{filename:.+}" to download uploaded file
 - GET "test" to test the 2nd and 3rd step mentioned above
 - GET /chat to test the GPT4FREE (needs message in Request Body)
+- GET /swagger-ui/index.html and actuator
 
 
 ## Test
