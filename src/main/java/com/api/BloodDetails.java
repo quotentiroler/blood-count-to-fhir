@@ -18,16 +18,19 @@ import org.hl7.fhir.r4.model.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import de.difuture.component.fhiretlutils.util.FHIRUtils;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BloodDetails {
 
     private static final Logger logger = LoggerFactory.getLogger(BloodDetails.class);
     private static String observationString = "Observation/";
     private static String now = Instant.now().toString();
 
-    private String sex;
     private String practitioner;
     private String patient;
     private String orderId;
@@ -75,22 +78,22 @@ public class BloodDetails {
         diagnosticReport.setMeta(new Meta().addProfile(
                 "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"));
 
-        Identifier befund = new Identifier().setSystem("thisSystem").setValue(patient + "-" + now);
-        Coding fillerV2 = new Coding("http://terminology.hl7.org/CodeSystem/v2-0203", "FILL", "fillerV2");
+        Identifier befund = new Identifier().setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid").setValue(patient + "-" + now);
+        Coding fillerV2 = new Coding("http://terminology.hl7.org/CodeSystem/v2-0203", "FILL", "Filler Identifier");
         befund.setType(new CodeableConcept().addCoding(fillerV2));
         diagnosticReport.addIdentifier(befund);
 
         diagnosticReport.setBasedOn(List.of(new Reference().setIdentifier(
-                new Identifier().setValue(orderId).setSystem(patient + "-" + practitioner + "-" + date))));
+                new Identifier().setValue(orderId).setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid"))));
 
         diagnosticReport.setStatus(DiagnosticReport.DiagnosticReportStatus.FINAL);
 
-        Coding loinclab = new Coding("http://loinc.org", "26436-6", "loinc-lab");
+        Coding loinclab = new Coding("http://loinc.org", "26436-6", "Laboratory studies (set)");
         Coding dss = new Coding("http://terminology.hl7.org/CodeSystem/v2-0074", "LAB",
-                "http://terminology.hl7.org/CodeSystem/v2-0074");
+                "Laboratory");
         diagnosticReport.setCategory(List.of(new CodeableConcept().addCoding(loinclab).addCoding(dss)));
 
-        Coding loinclabReport = new Coding("http://loinc.org", "11502-2", "loinc-labReport");
+        Coding loinclabReport = new Coding("http://loinc.org", "11502-2", "Laboratory report");
         diagnosticReport.setCode(new CodeableConcept().addCoding(loinclabReport));
 
         diagnosticReport.setSubject(new Reference().setIdentifier(new Identifier().setValue(patient)));
@@ -118,11 +121,11 @@ public class BloodDetails {
         if (erythrocytes != null) {
             try {
                 Observation observation = createObservation("erythrocytes");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(erythrocytes)).setUnit("10*6/µl")
-                        .setSystem("http://unitsofmeasure.org").setCode("10*6/µl");
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(erythrocytes)).setUnit("10*6/uL")
+                        .setSystem("http://unitsofmeasure.org").setCode("10*6/uL");
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "26453-1", "erythrocytes")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "26453-1", "Erythrocytes [#/volume] in Blood")));
                 result.add(observation);
 
             } catch (Exception e) {
@@ -138,7 +141,7 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "718-7", "hemoglobin")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "718-7", "Hemoglobin [Mass/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hemoglobin value: " + hemoglobin);
@@ -152,7 +155,7 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("pg");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "785-6", "hbeMch")));
+                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "785-6", "MCH [Entitic mass] by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hbeMch value: " + hbeMch);
@@ -182,7 +185,7 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "20570-8", "hematocrit")));
+                                .addCoding(new Coding("http://loinc.org", "20570-8", "Hematocrit [Volume Fraction] of Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hematocrit value: " + hematocrit);
@@ -210,7 +213,7 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("%");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "788-0", "rdwEry")));
+                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "788-0", "Erythrocyte distribution width [Ratio] by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid rdwEry value: " + rdwEry);
@@ -220,12 +223,12 @@ public class BloodDetails {
         if (platelets != null) {
             try {
                 Observation observation = createObservation("platelets");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(platelets)).setUnit("10*3/µl")
-                        .setSystem("http://unitsofmeasure.org").setCode("10*3/µl");
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(platelets)).setUnit("10*3/ul")
+                        .setSystem("http://unitsofmeasure.org").setCode("10*3/ul");
 
                 observation.setValue(valueQuantity);
                 observation
-                        .setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "777-3", "platelets")));
+                        .setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "777-3", "Platelets [#/volume] in Blood by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid platelets value: " + platelets);
@@ -235,13 +238,13 @@ public class BloodDetails {
         if (leukocytes != null) {
             try {
                 Observation observation = createObservation("leukocytes");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(leukocytes)).setUnit("10*3/µl")
-                        .setSystem("http://unitsofmeasure.org").setCode("10*3/µl");
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(leukocytes)).setUnit("10*3/ul")
+                        .setSystem("http://unitsofmeasure.org").setCode("10*3/ul");
 
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "6690-2", "leukocytes")));
+                                .addCoding(new Coding("http://loinc.org", "6690-2", "Leukocytes [#/volume] in Blood by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid leukocytes value: " + leukocytes);
@@ -407,7 +410,7 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "2093-3", "cholesterol")));
+                                .addCoding(new Coding("http://loinc.org", "2093-3", "Cholesterol [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid cholesterol value: " + cholesterol);
@@ -437,7 +440,7 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "2085-9", "hdlCholesterol")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "2085-9", "Cholesterol in HDL [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hdlCholesterol value: " + hdlCholesterol);
@@ -452,7 +455,7 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "18262-6", "ldlCholesterol")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "18262-6", "Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid ldlCholesterol value: " + ldlCholesterol);
@@ -483,7 +486,7 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "2160-0", "creatinine")));
+                                .addCoding(new Coding("http://loinc.org", "2160-0", "Creatinine [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid creatinine value: " + creatinine);
@@ -493,8 +496,8 @@ public class BloodDetails {
         if (gfr2005 != null) {
             try {
                 Observation observation = createObservation("gfr2005");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2005)).setUnit("ml/min/1.73m2")
-                        .setSystem("http://unitsofmeasure.org").setCode("ml/min/1.73m2");
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2005)).setUnit("mL/min/{1.73_m2}")
+                        .setSystem("http://unitsofmeasure.org").setCode("mL/min/{1.73_m2}");
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
@@ -508,8 +511,8 @@ public class BloodDetails {
         if (gfr2009 != null) {
             try {
                 Observation observation = createObservation("gfr2009");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2009)).setUnit("ml/min/1.73m2")
-                        .setSystem("http://unitsofmeasure.org").setCode("ml/min/1.73m2");
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2009)).setUnit("mL/min/{1.73_m2}")
+                        .setSystem("http://unitsofmeasure.org").setCode("mL/min/{1.73_m2}");
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
@@ -527,7 +530,7 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("mg/dl");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "2161-8", "urea")));
+                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "25549-7", "Urea [Moles/volume] in Body fluid")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid urea value: " + urea);
@@ -552,8 +555,8 @@ public class BloodDetails {
         if (iron != null) {
             try {
                 Observation observation = createObservation("iron");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(iron)).setUnit("µg/dl")
-                        .setSystem("http://unitsofmeasure.org").setCode("µg/dl");
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(iron)).setUnit("ug/dl")
+                        .setSystem("http://unitsofmeasure.org").setCode("ug/dl");
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
@@ -620,7 +623,7 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "6768-6", "vitaminB12")));
+                                .addCoding(new Coding("http://loinc.org", "16695-9", "Cobalamin (Vitamin B12) [Mass/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid vitaminB12 value: " + vitaminB12);
@@ -651,7 +654,7 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation.setCode(
                         new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "35200-5", "nonHdlCholesterol")));
+                                .addCoding(new Coding("http://loinc.org", "43396-1", "Cholesterol non HDL [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid nonHdlCholesterol value: " + nonHdlCholesterol);
@@ -665,22 +668,25 @@ public class BloodDetails {
         Observation observation = new Observation();
         observation.setMeta(new Meta().addProfile(
                 "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"));
-        Identifier analyseBefundCode = new Identifier().setSystem(observationString)
+        Identifier analyseBefundCode = new Identifier().setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid")
                 .setValue(name + "-" + now);
-        Coding observationInstanceV2 = new Coding("http://terminology.hl7.org/CodeSystem/v2-0203", "OBI",
-                "observationInstanceV2");
+        Coding observationInstanceV2 = new Coding("http://terminology.hl7.org/CodeSystem/v2-0203", "MR",
+                "Medical record number");
         analyseBefundCode.setType(new CodeableConcept().addCoding(observationInstanceV2));
         observation.addIdentifier(analyseBefundCode);
         observation.setStatus(Observation.ObservationStatus.FINAL);
-        Coding loincObservation = new Coding("http://loinc.org", "26436-6", "loinc-observation");
+        Coding loincObservation = new Coding("http://loinc.org", "58410-2", "CBC panel - Blood by Automated count");
         Coding observationCategory = new Coding("http://terminology.hl7.org/CodeSystem/observation-category",
-                "laboratory", "observation-category");
+                "laboratory", "Laboratory");
         observation
                 .setCategory(List.of(new CodeableConcept().addCoding(loincObservation).addCoding(observationCategory)));
         observation.setSubject(new Reference().setIdentifier(new Identifier().setValue(patient)));
-        observation
-                .setEffective((DateTimeType) new DateTimeType(Date.valueOf(date)).addExtension(new Extension().setUrl(
-                        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/QuelleKlinischesBezugsdatum")));
+        if (date != null) {
+            DateTimeType effective = new DateTimeType(Date.valueOf(date));
+            observation.setEffective(effective);
+        } else {
+            observation.getEffectiveDateTimeType().addExtension(FHIRUtils.UNKNOWN_EXTENSION);
+        }
         observation.setPerformer(List.of(new Reference().setIdentifier(new Identifier().setValue(practitioner))));
         return observation;
     }
