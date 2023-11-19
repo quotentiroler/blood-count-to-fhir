@@ -1,6 +1,5 @@
 # pdf-to-national-fhir
-Map blood values from pdf file with unkown structure to national fhir profiles
-Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensatz/Modul_Laborbefund/BeschreibungModul.html
+Map pdf file with unkown structure to NCD starting with German NCD for Blood Count Values https://www.medizininformatik-initiative.de/Kerndatensatz/Modul_Laborbefund/BeschreibungModul.html
 
 ## What is happening here?
 
@@ -8,7 +7,7 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 2. GPT4FREE converts the extracted tables to POJO .json
 3. POJO gets converted into FHIR profiles
 
-## Requireds Interpreters
+## Required Interpreters
 
 - Python3 with dependencies as defined in requirements.txt
 - Java 17 with dependencies as defined in pom.xml
