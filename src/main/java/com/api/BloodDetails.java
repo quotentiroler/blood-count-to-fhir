@@ -9,7 +9,6 @@ import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Observation;
@@ -28,7 +27,6 @@ import lombok.Data;
 public class BloodDetails {
 
     private static final Logger logger = LoggerFactory.getLogger(BloodDetails.class);
-    private static String observationString = "Observation/";
     private static String now = Instant.now().toString();
 
     private String practitioner;

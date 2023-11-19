@@ -31,3 +31,4 @@ The test class sometimes fails due to GPT4FREE output which is not always the sa
 ## Important
 
 ExtractTables API is not free to use. The API key was charged with 50 credits for 2 USD. 
+To try it out anyway, login with generated security password and username "user" is required.

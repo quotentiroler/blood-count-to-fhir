@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -17,7 +16,6 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Observation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -34,21 +32,19 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.api.storage.StorageException;
-import com.api.storage.StorageProperties;
 import com.api.storage.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class BloodController {
 
-  @Autowired
   private FhirContext fhirContext;
-
-  @Autowired
   private StorageService storageService;
 
-  @Autowired
-  private StorageProperties properties;
+  public BloodController(FhirContext fhirContext, StorageService storageService) {
+    this.fhirContext = fhirContext;
+    this.storageService = storageService;
+  }
 
   @GetMapping("/")
   public ModelAndView get(ModelAndView model) throws IOException {
