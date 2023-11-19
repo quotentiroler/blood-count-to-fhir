@@ -8,7 +8,7 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 2. GPT4FREE converts the extracted tables to POJO .json
 3. POJO gets converted into FHIR profiles
 
-# Routes
+## Routes
 
 - GET "/" to see UI
 - POST "/" for file upload
@@ -23,6 +23,6 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 
 The test class sometimes fails due to GPT4FREE output which is not always the same. 
 
-# Important
+## Important
 
 ExtractTables API is not free to use. The API key was charged with 50 credits for 2 USD. 
