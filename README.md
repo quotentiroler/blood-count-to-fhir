@@ -11,7 +11,7 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 ## Requireds Interpreters
 
 - Python3 with dependencies as defined in requirements.txt
-- Java 17 (maybe also other versions work) with dependencies as defined in pom.xml
+- Java 17 with dependencies as defined in pom.xml
 
 ## Routes
 
@@ -32,4 +32,4 @@ The test class sometimes fails due to GPT4FREE output which is not always the sa
 ## Important
 
 ExtractTables API is not free to use. The API key was charged with 50 credits for 2 USD. 
-To try it out anyway, login wit username and password "user" is required.
+To try it out anyway, login with username and password "user" is required.
