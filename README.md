@@ -8,10 +8,10 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 2. GPT4FREE converts the extracted tables to POJO .json
 3. POJO gets converted into FHIR profiles
 
-## Requirements
+## Requireds Interpreters
 
-Python <=3.9.13 (higher needs additional fixes)
-Java 17 (maybe lower is possible)
+- Python <=3.9.13 with dependencies as defined in requirements.txt
+- Java 17 (maybe also other versions work) with dependencies as defined in pom.xml
 
 ## Routes
 
