@@ -1,5 +1,5 @@
-# blood-to-national-fhir
-Map blood values to national fhir profiles
+# pdf-to-national-fhir
+Map blood values from pdf file with unkown structure to national fhir profiles
 Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensatz/Modul_Laborbefund/BeschreibungModul.html
 
 ## What is happening here?
