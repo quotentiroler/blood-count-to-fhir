@@ -10,7 +10,7 @@ Starting with German NCD https://www.medizininformatik-initiative.de/Kerndatensa
 
 ## Requireds Interpreters
 
-- Python <=3.9.13 with dependencies as defined in requirements.txt
+- Python3 with dependencies as defined in requirements.txt
 - Java 17 (maybe also other versions work) with dependencies as defined in pom.xml
 
 ## Routes
