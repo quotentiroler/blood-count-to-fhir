@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.api.storage.StorageException;
+import com.api.storage.StorageProperties;
 import com.api.storage.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,13 +42,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BloodController {
 
   @Autowired
-  FhirContext fhirContext;
+  private FhirContext fhirContext;
 
   @Autowired
   private StorageService storageService;
 
+  @Autowired
+  private StorageProperties properties;
+
   @GetMapping("/")
   public ModelAndView get(ModelAndView model) throws IOException {
+    storageService.init();
     storageService.deleteAll();
     model.addObject("files", storageService.loadAll().map(
         path -> {
@@ -107,7 +113,7 @@ public class BloodController {
   public String getChat(@RequestBody String message) throws IOException {
     ProcessBuilder processBuilder = new ProcessBuilder(
         "python3",
-        resolvePythonScriptPath("GPT4FREE.py"),
+        resolveResourcePathToString("GPT4FREE.py"),
         message);
     processBuilder.redirectErrorStream(true);
 
@@ -120,7 +126,7 @@ public class BloodController {
   public String getBlood() throws IOException {
     ProcessBuilder processBuilder = new ProcessBuilder(
         "python3",
-        resolvePythonScriptPath("OCR.py"));
+        resolveResourcePathToString("OCR.py"));
     // processBuilder.redirectErrorStream(true);
 
     Process process = processBuilder.start();
@@ -131,7 +137,7 @@ public class BloodController {
         + table.toString()
         + "  into BloodDetails object with attributes:" +
         Files.readString(
-            Paths.get("/mnt/c/Users/Max/VSCode/workspace/blood-to-national-fhir/src/main/resources/command.txt"))
+            resolveResourcePath("command.txt"))
         + " formatted as json in the right order. Please mind that \"Blutzucker\" means glucose.";
 
     String result = getChat(command);
@@ -147,23 +153,22 @@ public class BloodController {
 
     String command = "Please convert this: "
         + Files.readString(
-            Paths.get("/mnt/c/Users/Max/VSCode/workspace/blood-to-national-fhir/src/main/resources/testinput.txt"))
+            resolveResourcePath("testinput.txt"))
         + "  into BloodDetails object with attributes:" +
         Files.readString(
-            Paths.get("/mnt/c/Users/Max/VSCode/workspace/blood-to-national-fhir/src/main/resources/command.txt"))
+            resolveResourcePath("command.txt"))
         + " formatted as valid json in the right order.";
 
     ProcessBuilder processBuilder = new ProcessBuilder(
         "python3",
-        resolvePythonScriptPath("GPT4FREE.py"),
+        resolveResourcePathToString("GPT4FREE.py"),
         command);
-    // processBuilder.redirectErrorStream(true);
-
+    processBuilder.redirectErrorStream(true);
     Process process = processBuilder.start();
     List<String> table = readProcessOutput(process.getInputStream());
     process.destroy();
     String result = table.toString();
-    System.out.println(result);
+    System.out.println("result"+result);
     result = result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1);
     result = fixJson(result);
     BloodDetails bloodDetails = new ObjectMapper().readValue(result, BloodDetails.class);
@@ -192,7 +197,12 @@ public class BloodController {
     }
   }
 
-  private String resolvePythonScriptPath(String filename) {
+  private Path resolveResourcePath(String filename) {
+    File file = new File("src/main/resources/" + filename);
+    return file.toPath();
+  }
+
+  private String resolveResourcePathToString(String filename) {
     File file = new File("src/main/resources/" + filename);
     return file.getAbsolutePath();
   }
