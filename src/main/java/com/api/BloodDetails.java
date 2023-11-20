@@ -76,7 +76,8 @@ public class BloodDetails {
         diagnosticReport.setMeta(new Meta().addProfile(
                 "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"));
 
-        Identifier befund = new Identifier().setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid").setValue(patient + "-" + now);
+        Identifier befund = new Identifier().setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid")
+                .setValue(patient + "-" + now);
         Coding fillerV2 = new Coding("http://terminology.hl7.org/CodeSystem/v2-0203", "FILL", "Filler Identifier");
         befund.setType(new CodeableConcept().addCoding(fillerV2));
         diagnosticReport.addIdentifier(befund);
@@ -113,17 +114,18 @@ public class BloodDetails {
 
     }
 
-    public List<Observation> tObservations() {
+    public List<Observation> toObservations() {
         List<Observation> result = new ArrayList<>();
 
         if (erythrocytes != null) {
             try {
                 Observation observation = createObservation("erythrocytes");
                 Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(erythrocytes)).setUnit("10*6/uL")
-                        .setSystem("http://unitsofmeasure.org").setCode("10*6/uL");
+                        .setSystem("http://unitsofmeasure.org").setCode("pL");
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "26453-1", "Erythrocytes [#/volume] in Blood")));
+                        new CodeableConcept().addCoding(
+                                new Coding("http://loinc.org", "26453-1", "Erythrocytes [#/volume] in Blood")));
                 result.add(observation);
 
             } catch (Exception e) {
@@ -139,7 +141,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "718-7", "Hemoglobin [Mass/volume] in Blood")));
+                        new CodeableConcept().addCoding(
+                                new Coding("http://loinc.org", "718-7", "Hemoglobin [Mass/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hemoglobin value: " + hemoglobin);
@@ -153,7 +156,8 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("pg");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "785-6", "MCH [Entitic mass] by Automated count")));
+                observation.setCode(new CodeableConcept()
+                        .addCoding(new Coding("http://loinc.org", "785-6", "MCH [Entitic mass] by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hbeMch value: " + hbeMch);
@@ -167,7 +171,7 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("fl");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "787-2", "mcv")));
+                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "787-2", "MCV [Entitic volume] by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid mcv value: " + mcv);
@@ -183,7 +187,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "20570-8", "Hematocrit [Volume Fraction] of Blood")));
+                                .addCoding(new Coding("http://loinc.org", "20570-8",
+                                        "Hematocrit [Volume Fraction] of Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hematocrit value: " + hematocrit);
@@ -197,7 +202,7 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("g/dl");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "786-4", "mchc")));
+                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "786-4", "MCHC [Mass/volume] by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid mchc value: " + mchc);
@@ -211,7 +216,8 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("%");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "788-0", "Erythrocyte distribution width [Ratio] by Automated count")));
+                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "788-0",
+                        "Erythrocyte distribution width [Ratio] by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid rdwEry value: " + rdwEry);
@@ -226,7 +232,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation
-                        .setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "777-3", "Platelets [#/volume] in Blood by Automated count")));
+                        .setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "777-3",
+                                "Platelets [#/volume] in Blood by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid platelets value: " + platelets);
@@ -242,7 +249,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "6690-2", "Leukocytes [#/volume] in Blood by Automated count")));
+                                .addCoding(new Coding("http://loinc.org", "6690-2",
+                                        "Leukocytes [#/volume] in Blood by Automated count")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid leukocytes value: " + leukocytes);
@@ -257,7 +265,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "AST", "gotAst")));
+                        .addCoding(new Coding("https://loinc.org/", "1920-8",
+                                "Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid gotAst value: " + gotAst);
@@ -272,7 +281,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "ALT", "gptAlt")));
+                        .addCoding(new Coding("https://loinc.org/", "1742-6",
+                                "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid gptAlt value: " + gptAlt);
@@ -287,7 +297,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "GGT", "gammaGt")));
+                        .addCoding(new Coding("https://loinc.org/", "2324-2",
+                                "Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid gammaGt value: " + gammaGt);
@@ -302,7 +313,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "BIL", "bilirubin")));
+                        .addCoding(
+                                new Coding("https://loinc.org/", "42719-5", "Bilirubin.total [Mass/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid bilirubin value: " + bilirubin);
@@ -317,7 +329,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "AMY", "amylase")));
+                        .addCoding(new Coding("https://loinc.org/1798-8", "1798-8",
+                                "Amylase [Enzymatic activity/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid amylase value: " + amylase);
@@ -332,7 +345,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "NA", "sodium")));
+                        .addCoding(new Coding("https://loinc.org/2947-0", "2947-0",
+                                "Sodium [Moles/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid sodium value: " + sodium);
@@ -347,7 +361,7 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "K", "potassium")));
+                        .addCoding(new Coding("https://loinc.org/", "6298-4", "Potassium [Moles/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid potassium value: " + potassium);
@@ -361,8 +375,9 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("mg/dl");
 
                 observation.setValue(valueQuantity);
-                observation
-                        .setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "2345-7", "glucose")));
+                observation.setCode(new CodeableConcept()
+                                .addCoding(new Coding("http://loinc.org", "2345-7",
+                                 "Glucose [Mass/volume]")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid glucose value: " + glucose);
@@ -377,7 +392,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "HBA1C", "hbA1cAbsolute")));
+                        .addCoding(new Coding("https://loinc.org/", "4548-4",
+                                "Hemoglobin A1c/Hemoglobin.total in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hbA1cAbsolute value: " + hbA1cAbsolute);
@@ -392,7 +408,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "HBA1C", "hbA1cRelative")));
+                        .addCoding(new Coding("https://loinc.org/", "HBA1C",
+                         "hbA1cRelative")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hbA1cRelative value: " + hbA1cRelative);
@@ -408,7 +425,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "2093-3", "Cholesterol [Mass/volume] in Serum or Plasma")));
+                                .addCoding(new Coding("http://loinc.org", "2093-3",
+                                        "Cholesterol [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid cholesterol value: " + cholesterol);
@@ -438,7 +456,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "2085-9", "Cholesterol in HDL [Mass/volume] in Serum or Plasma")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "2085-9",
+                                "Cholesterol in HDL [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid hdlCholesterol value: " + hdlCholesterol);
@@ -453,7 +472,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "18262-6", "Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "18262-6",
+                                "Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid ldlCholesterol value: " + ldlCholesterol);
@@ -468,7 +488,7 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "TSH", "tshBasal")));
+                        .addCoding(new Coding("https://loinc.org/", "14999-7", "Thyrotropin [Units/volume] in Serum or Plasma --baseline")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid tshBasal value: " + tshBasal);
@@ -484,7 +504,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "2160-0", "Creatinine [Mass/volume] in Serum or Plasma")));
+                                .addCoding(new Coding("http://loinc.org", "2160-0",
+                                        "Creatinine [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid creatinine value: " + creatinine);
@@ -494,12 +515,14 @@ public class BloodDetails {
         if (gfr2005 != null) {
             try {
                 Observation observation = createObservation("gfr2005");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2005)).setUnit("mL/min/{1.73_m2}")
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2005))
+                        .setUnit("mL/min/{1.73_m2}")
                         .setSystem("http://unitsofmeasure.org").setCode("mL/min/{1.73_m2}");
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "GFR", "gfr2005")));
+                        .addCoding(new Coding("https://loinc.org/", "77147-7",
+                         "Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum, Plasma or Blood by Creatinine-based formula (MDRD)")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid gfr2005 value: " + gfr2005);
@@ -509,12 +532,14 @@ public class BloodDetails {
         if (gfr2009 != null) {
             try {
                 Observation observation = createObservation("gfr2009");
-                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2009)).setUnit("mL/min/{1.73_m2}")
+                Quantity valueQuantity = new Quantity().setValue(Double.parseDouble(gfr2009))
+                        .setUnit("mL/min/{1.73_m2}")
                         .setSystem("http://unitsofmeasure.org").setCode("mL/min/{1.73_m2}");
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "GFR", "gfr2009")));
+                        .addCoding(new Coding("https://loinc.org/", "62238-1",
+                         "Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum, Plasma or Blood by Creatinine-based formula (CKD-EPI)")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid gfr2009 value: " + gfr2009);
@@ -528,7 +553,8 @@ public class BloodDetails {
                         .setSystem("http://unitsofmeasure.org").setCode("mg/dl");
 
                 observation.setValue(valueQuantity);
-                observation.setCode(new CodeableConcept().addCoding(new Coding("http://loinc.org", "25549-7", "Urea [Moles/volume] in Body fluid")));
+                observation.setCode(new CodeableConcept()
+                        .addCoding(new Coding("http://loinc.org", "25549-7", "Urea [Moles/volume] in Body fluid")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid urea value: " + urea);
@@ -559,7 +585,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation.setCode(
                         new CodeableConcept()
-                                .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "FE", "iron")));
+                                .addCoding(new Coding("https://loinc.org/", "2498-4",
+                                        "Iron [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid iron value: " + iron);
@@ -574,7 +601,8 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(new CodeableConcept()
-                        .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "FER", "ferritin")));
+                        .addCoding(new Coding("https://loinc.org/", "2276-4",
+                                "Ferritin [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid ferritin value: " + ferritin);
@@ -590,7 +618,7 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation.setCode(
                         new CodeableConcept()
-                                .addCoding(new Coding("http://www.labcodes.de/codesystem/1.0", "CRP", "crp")));
+                                .addCoding(new Coding("https://loinc.org/", "1988-5", "C reactive protein [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid crp value: " + crp);
@@ -621,7 +649,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation
                         .setCode(new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "16695-9", "Cobalamin (Vitamin B12) [Mass/volume] in Blood")));
+                                .addCoding(new Coding("http://loinc.org", "16695-9",
+                                        "Cobalamin (Vitamin B12) [Mass/volume] in Blood")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid vitaminB12 value: " + vitaminB12);
@@ -636,7 +665,7 @@ public class BloodDetails {
 
                 observation.setValue(valueQuantity);
                 observation.setCode(
-                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "6769-4", "folicAcid")));
+                        new CodeableConcept().addCoding(new Coding("http://loinc.org", "2284-8", "Folate [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid folicAcid value: " + folicAcid);
@@ -652,7 +681,8 @@ public class BloodDetails {
                 observation.setValue(valueQuantity);
                 observation.setCode(
                         new CodeableConcept()
-                                .addCoding(new Coding("http://loinc.org", "43396-1", "Cholesterol non HDL [Mass/volume] in Serum or Plasma")));
+                                .addCoding(new Coding("http://loinc.org", "43396-1",
+                                        "Cholesterol non HDL [Mass/volume] in Serum or Plasma")));
                 result.add(observation);
             } catch (Exception e) {
                 logger.warn("Invalid nonHdlCholesterol value: " + nonHdlCholesterol);
@@ -666,7 +696,8 @@ public class BloodDetails {
         Observation observation = new Observation();
         observation.setMeta(new Meta().addProfile(
                 "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"));
-        Identifier analyseBefundCode = new Identifier().setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid")
+        Identifier analyseBefundCode = new Identifier()
+                .setSystem("http://mii-standort.example.de/fhir/NamingSystem/pid")
                 .setValue(name + "-" + now);
         Coding observationInstanceV2 = new Coding("http://terminology.hl7.org/CodeSystem/v2-0203", "MR",
                 "Medical record number");

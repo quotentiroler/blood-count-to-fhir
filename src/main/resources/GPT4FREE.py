@@ -3,9 +3,9 @@ import sys
 import asyncio
 
 _providers = [
-    g4f.Provider.Bing,
+    #g4f.Provider.Bing,
     g4f.Provider.GptGo,
-    g4f.Provider.You,
+    #g4f.Provider.You,
 ]
 
 async def run_provider(provider: g4f.Provider.BaseProvider):
@@ -16,14 +16,24 @@ async def run_provider(provider: g4f.Provider.BaseProvider):
             provider=provider,
         )
         print(f"{provider.__name__}:", response)
-        exit()
+        # Cancel the remaining tasks once a response is received
+        for task in asyncio.all_tasks():
+            if task != asyncio.current_task():
+                task.cancel()
+    except asyncio.CancelledError:
+        pass
     except Exception as e:
         print(f"{provider.__name__}:", e)
-        
-async def run_all():
-    calls = [
-        run_provider(provider) for provider in _providers
-    ]
-    await asyncio.gather(*calls)
 
-asyncio.run(run_all())
+async def run_all():
+    tasks = [run_provider(provider) for provider in _providers]
+    await asyncio.gather(*tasks)
+
+async def main():
+    try:
+        await run_all()
+    except Exception as e:
+        print("Error:", e)
+
+if __name__ == "__main__":
+    asyncio.run(main())

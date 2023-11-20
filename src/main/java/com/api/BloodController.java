@@ -1,21 +1,18 @@
 package com.api;
 
 import ca.uhn.fhir.context.FhirContext;
-import java.io.BufferedReader;
-import java.io.File;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
+import org.slf4j.LoggerFactory;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Observation;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +34,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class BloodController {
+
+  private static final org.slf4j.Logger logger = LoggerFactory
+      .getLogger(BloodController.class);
 
   private FhirContext fhirContext;
   private StorageService storageService;
@@ -95,7 +95,8 @@ public class BloodController {
     Bundle bundle = new Bundle();
     bundle.setType(BundleType.COLLECTION);
 
-    List<Observation> obs = bloodDetails.tObservations();
+    List<Observation> obs = bloodDetails.toObservations();
+    logger.info("Mapped {} observations", obs.size());
     DiagnosticReport dr = bloodDetails.toReport(obs);
     bundle.addEntry().setResource(dr).setFullUrl("blood:tofhir:1");
     if (obs.isEmpty())
@@ -109,38 +110,24 @@ public class BloodController {
 
   @GetMapping("/chat")
   public String getChat(@RequestBody String message) throws IOException {
-    ProcessBuilder processBuilder = new ProcessBuilder(
-        "python3",
-        resolveResourcePathToString("GPT4FREE.py"),
-        message);
-    processBuilder.redirectErrorStream(true);
-
-    Process process = processBuilder.start();
-    List<String> results = readProcessOutput(process.getInputStream());
+    Process process = AppUtils.startNLP(message);
+    List<String> results = AppUtils.readProcessOutput(process.getInputStream());
     return results.toString();
   }
 
   @GetMapping("/blood")
   public String getBlood() throws IOException {
-    ProcessBuilder processBuilder = new ProcessBuilder(
-        "python3",
-        resolveResourcePathToString("OCR.py"));
-    // processBuilder.redirectErrorStream(true);
-
-    Process process = processBuilder.start();
-    List<String> table = readProcessOutput(process.getInputStream());
-    process.destroy();
-
-    String command = "Please convert this: "
+    //Use ExtractTables
+    Process process = AppUtils.startOCR();
+    List<String> table = AppUtils.readProcessOutput(process.getInputStream());
+        String command = "Please convert this: "
         + table.toString()
         + "  into BloodDetails object with attributes:" +
         Files.readString(
-            resolveResourcePath("command.txt"))
-        + " formatted as json in the right order. Please mind that \"Blutzucker\" means glucose.";
-
+            AppUtils.resolveResourcePath("command.txt"))
+        + " formatted as json in the right order.";
     String result = getChat(command);
-    result = result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1);
-    result = fixJson(result);
+    result = AppUtils.fixJson(result);
     BloodDetails bloodDetails = new ObjectMapper().readValue(result, BloodDetails.class);
     storageService.deleteAll();
     return toBundleString(bloodDetails);
@@ -148,59 +135,17 @@ public class BloodController {
 
   @GetMapping("/test")
   public String test() throws IOException {
-
     String command = "Please convert this: "
         + Files.readString(
-            resolveResourcePath("testinput.txt"))
+            AppUtils.resolveResourcePath("testinput.txt"))
         + "  into BloodDetails object with attributes:" +
         Files.readString(
-            resolveResourcePath("command.txt"))
-        + " formatted as valid json in the right order.";
-
-    ProcessBuilder processBuilder = new ProcessBuilder(
-        "python3",
-        resolveResourcePathToString("GPT4FREE.py"),
-        command);
-    processBuilder.redirectErrorStream(true);
-    Process process = processBuilder.start();
-    List<String> table = readProcessOutput(process.getInputStream());
-    process.destroy();
-    String result = table.toString();
-    result = result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1);
-    result = fixJson(result);
+            AppUtils.resolveResourcePath("command.txt"))
+        + " formatted as json in the right order.";
+    String result = getChat(command);
+    result = AppUtils.fixJson(result);
     BloodDetails bloodDetails = new ObjectMapper().readValue(result, BloodDetails.class);
     return toBundleString(bloodDetails);
   }
 
-  private String fixJson(String json) {
-    String trimmedJson = json.replaceAll("\\s+", "");
-    String first = IntStream.range(0, trimmedJson.length())
-        .filter(i -> trimmedJson.charAt(i) != ',' || trimmedJson.charAt(i + 1) == '\"')
-        .mapToObj(i -> Character.toString(trimmedJson.charAt(i)))
-        .collect(Collectors.joining(""));
-    String second = IntStream.range(0, first.length())
-        .filter(i -> first.charAt(i) != ',' || first.charAt(i - 1) == '\"' || first.charAt(i - 1) == ']' || Character.isDigit(first.charAt(i - 1)))
-        .mapToObj(i -> Character.toString(first.charAt(i)))
-        .collect(Collectors.joining(""));
-    return second.replace("null", "\"\",");
-  }
-
-  private List<String> readProcessOutput(InputStream inputStream)
-      throws IOException {
-    try (
-        BufferedReader output = new BufferedReader(
-            new InputStreamReader(inputStream))) {
-      return output.lines().collect(Collectors.toList());
-    }
-  }
-
-  private Path resolveResourcePath(String filename) {
-    File file = new File("src/main/resources/" + filename);
-    return file.toPath();
-  }
-
-  private String resolveResourcePathToString(String filename) {
-    File file = new File("src/main/resources/" + filename);
-    return file.getAbsolutePath();
-  }
 }

@@ -1,41 +1,41 @@
-    private String practitioner; //synonyme: Einsender, Arzt
-    private String patient;
-    private String orderId;
-    private String date; //format: yyyy-MM-dd
-    private List<String> materials;
-    private Double erythrocytes;
-    private Double hemoglobin;
-    private Double hbeMch;
-    private Double mcv;
-    private Double hematocrit;
-    private Double mchc;
-    private Double rdwEry;
-    private Double platelets;
-    private Double leukocytes;
-    private Double gotAst;
-    private Double gptAlt;
-    private Double gammaGt;
-    private Double bilirubin;
-    private Double amylase;
-    private Double sodium;
-    private Double potassium;
-    private Double glucose; //synonyme: Blutzucker, Glukose
-    private Double hbA1cAbsolute;
-    private Double hbA1cRelative;
-    private Double cholesterol;
-    private Double triglycerides;
-    private Double hdlCholesterol;
-    private Double ldlCholesterol;
-    private Double tshBasal;
-    private Double creatinine;
-    private Double gfr2005;
-    private Double gfr2009;
-    private Double urea;
-    private Double uricAcid;
-    private Double iron;
-    private Double ferritin;
-    private Double crp;
-    private Double vitaminD3;
-    private Double vitaminB12;
-    private Double folicAcid;
-    private Double nonHdlCholesterol;
+String practitioner; //synonyme: Einsender, Arzt
+String patient;
+String orderId;
+String date; //format: yyyy-MM-dd
+List<String> materials;
+Double erythrocytes;
+Double hemoglobin;
+Double hbeMch;
+Double mcv;
+Double hematocrit;
+Double mchc;
+Double rdwEry;
+Double platelets;
+Double leukocytes;
+Double gotAst;
+Double gptAlt;
+Double gammaGt;
+Double bilirubin;
+Double amylase;
+Double sodium; //synonyme: Natrium
+Double potassium; //synonyme: Kalium
+Double glucose; //synonyme: Blutzucker, Glukose
+Double hbA1cAbsolute;
+Double hbA1cRelative;
+Double cholesterol;
+Double triglycerides;
+Double hdlCholesterol;
+Double ldlCholesterol;
+Double tshBasal;
+Double creatinine;
+Double gfr2005;
+Double gfr2009;
+Double urea; //synonyme: Harnstoff
+Double uricAcid; //synonyme: Harnsäure
+Double iron;
+Double ferritin;
+Double crp;
+Double vitaminD3;
+Double vitaminB12;
+Double folicAcid;
+Double nonHdlCholesterol;
