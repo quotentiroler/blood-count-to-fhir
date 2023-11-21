@@ -1,2 +1,2 @@
-ExtractTable==2.4.0
-g4f==0.1.8.6
+ExtractTable
+g4f
