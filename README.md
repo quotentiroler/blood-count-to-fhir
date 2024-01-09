@@ -25,11 +25,11 @@ Map pdf file with unkown structure to NCD starting with German NCD for Blood Cou
 
 ## Test
 
-The test class sometimes fails due to GPT4FREE output which is not always the same. But it should work at least 9 out of 10 times.
+The test class does not include OCR testing. The OCR already happened when the tests are being run. The tests expect more than 20, but less than 30 values to be mapped. Why? Because the input PDF file had very bad quality as well as the original piece of paper that was scanned using a mobile phone camera. After testing different gpt-APIs, it turned out that no API can map more than 30 values in the given scenario accurately. Therefore, if more than 30 values are mapped, at least few of them are faulty and thus, test#3 fails. This shows also that even in fault-prone scenarios, the mapping can be completed and some GPT-APIs manage to exclude faulty values without any additional configuration, but not all of them. <br>
+
+The test class says nothing about the accuracy when other input data with different quality is provided. If the input data has better quality, more values would be expected to be mapped (ideally, all of them). The input data can be improved by either using a proper scanner instead of a mobile phone camera, and/or by creating a new OCR-lib that is trained for this purpose. Tesseract OCR is already included in the repository, but the algorithm yet has to be trained since it is too inaccurate to be used at this point.
 
 ## Important
 
 ExtractTables API is not free to use. The API key was charged with 50 credits for 2 USD. <br>
 To try it out anyway, login with username and password "user" is required. It is recommended and sufficient to use the Test class instead. <br>
-<br>
-There is also a Class for OCR with Tesseract (OCR.java) which is open source, but the accuracy is too bad to be processed by the NLP at the current time.
