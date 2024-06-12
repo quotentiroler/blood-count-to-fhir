@@ -714,7 +714,7 @@ public class BloodDetails {
             DateTimeType effective = new DateTimeType(Date.valueOf(date));
             observation.setEffective(effective);
         } else {
-            observation.getEffectiveDateTimeType().addExtension(FHIRUtils.UNKNOWN_EXTENSION);
+          //  observation.getEffectiveDateTimeType().addExtension(FHIRUtils.UNKNOWN_EXTENSION);
         }
         observation.setPerformer(List.of(new Reference().setIdentifier(new Identifier().setValue(practitioner))));
         return observation;

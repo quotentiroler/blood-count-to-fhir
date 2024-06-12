@@ -148,11 +148,6 @@
             <version>LATEST</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>de.difuture.tum</groupId>
-            <artifactId>component-fhir-etl-utils</artifactId>
-            <version>4.4.0-SNAPSHOT</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-base -->
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
