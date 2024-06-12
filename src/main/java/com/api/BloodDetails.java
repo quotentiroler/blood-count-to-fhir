@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import de.difuture.component.fhiretlutils.util.FHIRUtils;
 import lombok.Data;
 
 @Data
