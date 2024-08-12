@@ -37,18 +37,22 @@ public class AppUtils {
     }
 
     static String fixJson(String json) {
-        json = json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1);
-        String trimmedJson = json.replaceAll("\\s+", "");
-        String first = IntStream.range(0, trimmedJson.length())
-                .filter(i -> trimmedJson.charAt(i) != ',' || trimmedJson.charAt(i + 1) == '\"')
-                .mapToObj(i -> Character.toString(trimmedJson.charAt(i)))
-                .collect(Collectors.joining(""));
-        String second = IntStream.range(0, first.length())
-                .filter(i -> first.charAt(i) != ',' || first.charAt(i - 1) == '\"' || first.charAt(i - 1) == ']'
-                        || Character.isDigit(first.charAt(i - 1)))
-                .mapToObj(i -> Character.toString(first.charAt(i)))
-                .collect(Collectors.joining(""));
-        return second.replace("null", "\"\",");
+        try {
+            json = json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1);
+            String trimmedJson = json.replaceAll("\\s+", "");
+            String first = IntStream.range(0, trimmedJson.length())
+                    .filter(i -> trimmedJson.charAt(i) != ',' || trimmedJson.charAt(i + 1) == '\"')
+                    .mapToObj(i -> Character.toString(trimmedJson.charAt(i)))
+                    .collect(Collectors.joining(""));
+            String second = IntStream.range(0, first.length())
+                    .filter(i -> first.charAt(i) != ',' || first.charAt(i - 1) == '\"' || first.charAt(i - 1) == ']'
+                            || Character.isDigit(first.charAt(i - 1)))
+                    .mapToObj(i -> Character.toString(first.charAt(i)))
+                    .collect(Collectors.joining(""));
+            return second.replace("null", "\"\",");
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid JSON format");
+        }
     }
 
     static List<String> readProcessOutput(InputStream inputStream)

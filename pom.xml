@@ -120,6 +120,14 @@
             <version>${log4jdbc.log4j2.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/html2pdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>html2pdf</artifactId>
+            <version>5.0.5</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
         <dependency>
             <groupId>org.springframework.security</groupId>

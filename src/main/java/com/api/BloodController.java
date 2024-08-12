@@ -1,6 +1,7 @@
 package com.api;
 
 import ca.uhn.fhir.context.FhirContext;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.api.storage.StorageException;
 import com.api.storage.StorageService;
+import com.api.util.DataGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -90,6 +92,7 @@ public class BloodController {
     return model;
   }
 
+  @Operation(summary = "Convert BloodDetails POJOs to FHIR Bundle")
   @PostMapping("/blood")
   String toBundleString(@RequestBody BloodDetails bloodDetails) {
     Bundle bundle = new Bundle();
@@ -108,6 +111,7 @@ public class BloodController {
     return fhirContext.newJsonParser().setPrettyPrint(false).encodeResourceToString(bundle);
   }
 
+  @Operation(summary = "Test the GPT lib")
   @GetMapping("/chat")
   public String getChat(@RequestBody String message) throws IOException {
     Process process = AppUtils.startNLP(message);
@@ -115,6 +119,7 @@ public class BloodController {
     return results.toString();
   }
 
+  @Operation(summary = "Run the app on a PDF file in ./upload-dir")
   @GetMapping("/blood")
   public String getBlood() throws IOException {
     //Use ExtractTables
@@ -133,6 +138,18 @@ public class BloodController {
     return toBundleString(bloodDetails);
   }
 
+  @Operation(summary = "Generate Test Data")
+  @GetMapping("/generate")
+  public void generateTestData() {
+    DataGenerator dg = new DataGenerator(fhirContext);
+    for (int i = 0; i < 100; i++) {
+        dg.generateAll();
+        dg.reset();
+    }
+    dg.convertHtmlToPdfInFolder();
+  }
+
+  @Operation(summary = "Test the API")
   @GetMapping("/test")
   public String test() throws IOException {
     String command = "Please convert this: "

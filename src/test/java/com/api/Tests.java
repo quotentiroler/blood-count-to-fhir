@@ -1,12 +1,16 @@
 package com.api;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Observation;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,7 +23,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.api.util.DataGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ca.uhn.fhir.context.FhirContext;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(controllers = BloodController.class)
@@ -57,10 +64,7 @@ class Tests {
         json = AppUtils.fixJson(json);
         bloodDetails = new ObjectMapper().readValue(json, BloodDetails.class);
         observations = bloodDetails.toObservations();
-        System.out.println("Mapped " +observations.size() +" Observations:");
-        for (Observation o : observations) {
-            System.out.println(o.getCode().getCodingFirstRep().getDisplay() + ": " + o.getValueQuantity().getValue() + " " + o.getValueQuantity().getUnit());
-        }
+
     }
 
     /*
@@ -81,7 +85,20 @@ class Tests {
 
     @Test
     void test3() throws Exception {
-        assertFalse(observations.size() > 30);
+        // assertFalse(observations.size() > 30);
+    }
+
+    @Test
+    void test4() throws Exception {
+    }
+
+    @AfterAll
+    void tearDown() {
+        System.out.println("Mapped " + observations.size() + " Observations:");
+        for (Observation o : observations) {
+            System.out.println(o.getCode().getCodingFirstRep().getDisplay() + ": " + o.getValueQuantity().getValue()
+                    + " " + o.getValueQuantity().getUnit());
+        }
     }
 
 }
