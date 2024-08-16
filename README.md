@@ -22,7 +22,8 @@ Map pdf file with unkown structure to NCD starting with German NCD for Blood Cou
 - GET /test to test the 2nd and 3rd step mentioned above
 - GET /chat to test the GPT4FREE (needs message in Request Body)
 - GET /swagger-ui/index.html and actuator
-
+- GET /generate to generate test data
+- 
 ## Test
 
 The test class does not include OCR testing. The OCR already happened when the tests are being run. The tests expect more than 20, but less than 30 values to be mapped. Why? Because the input PDF file had very bad quality as well as the original piece of paper that was scanned using a mobile phone camera. After testing different gpt-APIs, it turned out that no API can map more than 30 values in the given scenario accurately. Therefore, if more than 30 values are mapped, at least few of them are faulty and thus, test#3 fails. This shows also that even in fault-prone scenarios, the mapping can be completed and some GPT-APIs manage to exclude faulty values without any additional configuration, but not all of them. <br>
