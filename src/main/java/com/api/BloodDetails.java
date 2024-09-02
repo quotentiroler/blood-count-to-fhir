@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -735,42 +736,42 @@ public class BloodDetails {
         this.orderId = "Order/" + (random.nextInt(100) + 1);
         this.date = "2021-" + (random.nextInt(12) + 1) + "-" + (random.nextInt(28) + 1);
         this.materials = List.of("Serum", "Plasma");
-        this.erythrocytes = String.format("%.1f", 3.5 + (random.nextDouble() * 2.0)); // 3.5 to 5.5
-        this.hemoglobin = String.format("%.1f", 12.0 + (random.nextDouble() * 6.0)); // 12.0 to 18.0
-        this.hbeMch = String.format("%.1f", 27.0 + (random.nextDouble() * 5.0)); // 27.0 to 32.0
-        this.mcv = String.format("%.1f", 80.0 + (random.nextDouble() * 20.0)); // 80.0 to 100.0
-        this.hematocrit = String.format("%.1f", 35.0 + (random.nextDouble() * 15.0)); // 35.0 to 50.0
-        this.mchc = String.format("%.1f", 32.0 + (random.nextDouble() * 4.0)); // 32.0 to 36.0
-        this.rdwEry = String.format("%.1f", 11.0 + (random.nextDouble() * 5.0)); // 11.0 to 16.0
-        this.platelets = String.format("%d", 150 + random.nextInt(200)); // 150 to 350
-        this.leukocytes = String.format("%.1f", 4.0 + (random.nextDouble() * 7.0)); // 4.0 to 11.0
-        this.gotAst = String.format("%d", 10 + random.nextInt(40)); // 10 to 50
-        this.gptAlt = String.format("%d", 10 + random.nextInt(40)); // 10 to 50
-        this.gammaGt = String.format("%d", 10 + random.nextInt(50)); // 10 to 60
-        this.bilirubin = String.format("%.1f", 0.1 + (random.nextDouble() * 1.9)); // 0.1 to 2.0
-        this.amylase = String.format("%d", 30 + random.nextInt(90)); // 30 to 120
-        this.sodium = String.format("%d", 135 + random.nextInt(10)); // 135 to 145
-        this.potassium = String.format("%.1f", 3.5 + (random.nextDouble() * 1.5)); // 3.5 to 5.0
-        this.glucose = String.format("%d", 70 + random.nextInt(80)); // 70 to 150
-        this.hbA1cAbsolute = String.format("%.1f", 4.0 + (random.nextDouble() * 2.0)); // 4.0 to 6.0
-        this.hbA1cRelative = String.format("%d", 20 + random.nextInt(20)); // 20 to 40
-        this.cholesterol = String.format("%d", 150 + random.nextInt(150)); // 150 to 300
-        this.triglycerides = String.format("%d", 50 + random.nextInt(200)); // 50 to 250
-        this.hdlCholesterol = String.format("%d", 40 + random.nextInt(40)); // 40 to 80
-        this.ldlCholesterol = String.format("%d", 70 + random.nextInt(130)); // 70 to 200
-        this.tshBasal = String.format("%.1f", 0.4 + (random.nextDouble() * 4.6)); // 0.4 to 5.0
-        this.creatinine = String.format("%.1f", 0.6 + (random.nextDouble() * 1.4)); // 0.6 to 2.0
-        this.gfr2005 = String.format("%d", 60 + random.nextInt(40)); // 60 to 100
-        this.gfr2009 = String.format("%d", 60 + random.nextInt(40)); // 60 to 100
-        this.urea = String.format("%d", 10 + random.nextInt(30)); // 10 to 40
-        this.uricAcid = String.format("%.1f", 3.0 + (random.nextDouble() * 4.0)); // 3.0 to 7.0
-        this.iron = String.format("%d", 50 + random.nextInt(150)); // 50 to 200
-        this.ferritin = String.format("%d", 20 + random.nextInt(280)); // 20 to 300
-        this.crp = String.format("%.1f", 0.0 + (random.nextDouble() * 1.0)); // 0.0 to 1.0
-        this.vitaminD3 = String.format("%d", 20 + random.nextInt(80)); // 20 to 100
-        this.vitaminB12 = String.format("%d", 200 + random.nextInt(800)); // 200 to 1000
-        this.folicAcid = String.format("%.1f", 2.0 + (random.nextDouble() * 18.0)); // 2.0 to 20.0
-        this.nonHdlCholesterol = String.format("%d", 100 + random.nextInt(150)); // 100 to 250
+        this.erythrocytes = String.format(Locale.US, "%.1f", 3.5 + (random.nextDouble() * 2.0)); // 3.5 to 5.5
+        this.hemoglobin = String.format(Locale.US, "%.1f", 12.0 + (random.nextDouble() * 6.0)); // 12.0 to 18.0
+        this.hbeMch = String.format(Locale.US, "%.1f", 27.0 + (random.nextDouble() * 5.0)); // 27.0 to 32.0
+        this.mcv = String.format(Locale.US, "%.1f", 80.0 + (random.nextDouble() * 20.0)); // 80.0 to 100.0
+        this.hematocrit = String.format(Locale.US, "%.1f", 35.0 + (random.nextDouble() * 15.0)); // 35.0 to 50.0
+        this.mchc = String.format(Locale.US, "%.1f", 32.0 + (random.nextDouble() * 4.0)); // 32.0 to 36.0
+        this.rdwEry = String.format(Locale.US, "%.1f", 11.0 + (random.nextDouble() * 5.0)); // 11.0 to 16.0
+        this.platelets = String.format(Locale.US, "%d", 150 + random.nextInt(200)); // 150 to 350
+        this.leukocytes = String.format(Locale.US, "%.1f", 4.0 + (random.nextDouble() * 7.0)); // 4.0 to 11.0
+        this.gotAst = String.format(Locale.US, "%d", 10 + random.nextInt(40)); // 10 to 50
+        this.gptAlt = String.format(Locale.US, "%d", 10 + random.nextInt(40)); // 10 to 50
+        this.gammaGt = String.format(Locale.US, "%d", 10 + random.nextInt(50)); // 10 to 60
+        this.bilirubin = String.format(Locale.US, "%.1f", 0.1 + (random.nextDouble() * 1.9)); // 0.1 to 2.0
+        this.amylase = String.format(Locale.US, "%d", 30 + random.nextInt(90)); // 30 to 120
+        this.sodium = String.format(Locale.US, "%d", 135 + random.nextInt(10)); // 135 to 145
+        this.potassium = String.format(Locale.US, "%.1f", 3.5 + (random.nextDouble() * 1.5)); // 3.5 to 5.0
+        this.glucose = String.format(Locale.US, "%d", 70 + random.nextInt(80)); // 70 to 150
+        this.hbA1cAbsolute = String.format(Locale.US, "%.1f", 4.0 + (random.nextDouble() * 2.0)); // 4.0 to 6.0
+        this.hbA1cRelative = String.format(Locale.US, "%d", 20 + random.nextInt(20)); // 20 to 40
+        this.cholesterol = String.format(Locale.US, "%d", 150 + random.nextInt(150)); // 150 to 300
+        this.triglycerides = String.format(Locale.US, "%d", 50 + random.nextInt(200)); // 50 to 250
+        this.hdlCholesterol = String.format(Locale.US, "%d", 40 + random.nextInt(40)); // 40 to 80
+        this.ldlCholesterol = String.format(Locale.US, "%d", 70 + random.nextInt(130)); // 70 to 200
+        this.tshBasal = String.format(Locale.US, "%.1f", 0.4 + (random.nextDouble() * 4.6)); // 0.4 to 5.0
+        this.creatinine = String.format(Locale.US, "%.1f", 0.6 + (random.nextDouble() * 1.4)); // 0.6 to 2.0
+        this.gfr2005 = String.format(Locale.US, "%d", 60 + random.nextInt(40)); // 60 to 100
+        this.gfr2009 = String.format(Locale.US, "%d", 60 + random.nextInt(40)); // 60 to 100
+        this.urea = String.format(Locale.US, "%d", 10 + random.nextInt(30)); // 10 to 40
+        this.uricAcid = String.format(Locale.US, "%.1f", 3.0 + (random.nextDouble() * 4.0)); // 3.0 to 7.0
+        this.iron = String.format(Locale.US, "%d", 50 + random.nextInt(150)); // 50 to 200
+        this.ferritin = String.format(Locale.US, "%d", 20 + random.nextInt(280)); // 20 to 300
+        this.crp = String.format(Locale.US, "%.1f", 0.0 + (random.nextDouble() * 1.0)); // 0.0 to 1.0
+        this.vitaminD3 = String.format(Locale.US, "%d", 20 + random.nextInt(80)); // 20 to 100
+        this.vitaminB12 = String.format(Locale.US, "%d", 200 + random.nextInt(800)); // 200 to 1000
+        this.folicAcid = String.format(Locale.US, "%.1f", 2.0 + (random.nextDouble() * 18.0)); // 2.0 to 20.0
+        this.nonHdlCholesterol = String.format(Locale.US, "%d", 100 + random.nextInt(150)); // 100 to 250
     }
 
 }
