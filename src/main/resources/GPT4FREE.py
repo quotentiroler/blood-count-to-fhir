@@ -3,9 +3,10 @@ import sys
 import asyncio
 
 _providers = [
+ 	#g4f.Provider.OpenRouter
     g4f.Provider.Bing,
     #g4f.Provider.GptGo,
-    g4f.Provider.You,
+    #g4f.Provider.You,
 ]
 
 async def run_provider(provider: g4f.Provider.BaseProvider):

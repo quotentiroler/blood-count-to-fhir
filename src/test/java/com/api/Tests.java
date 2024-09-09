@@ -2,13 +2,9 @@ package com.api;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Observation;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,10 +19,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.api.util.DataGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.uhn.fhir.context.FhirContext;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(controllers = BloodController.class)
