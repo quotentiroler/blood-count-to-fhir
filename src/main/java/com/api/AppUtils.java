@@ -30,7 +30,7 @@ public class AppUtils {
     static Process startNLP(String message) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "python3",
-                AppUtils.resolveResourcePathToString("GPT4FREE.py"),
+                AppUtils.resolveResourcePathToString("GPT4ALL.py"),
                 message);
         //processBuilder.redirectErrorStream(true);
         return processBuilder.start();

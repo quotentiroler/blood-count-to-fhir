@@ -1,2 +1,3 @@
 ExtractTable
 g4f
+gpt4all
